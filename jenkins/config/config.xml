@@ -1,0 +1,80 @@
+<?xml version='1.1' encoding='UTF-8'?>
+<hudson>
+  <disabledAdministrativeMonitors/>
+  <version>2.138.2</version>
+  <installStateName>RUNNING</installStateName>
+  <numExecutors>2</numExecutors>
+  <mode>NORMAL</mode>
+  <useSecurity>true</useSecurity>
+  <authorizationStrategy class="hudson.security.GlobalMatrixAuthorizationStrategy">
+    <permission>com.cloudbees.plugins.credentials.CredentialsProvider.Create:arun</permission>
+    <permission>com.cloudbees.plugins.credentials.CredentialsProvider.Delete:arun</permission>
+    <permission>com.cloudbees.plugins.credentials.CredentialsProvider.ManageDomains:arun</permission>
+    <permission>com.cloudbees.plugins.credentials.CredentialsProvider.Update:arun</permission>
+    <permission>com.cloudbees.plugins.credentials.CredentialsProvider.View:arun</permission>
+    <permission>hudson.model.Computer.Build:arun</permission>
+    <permission>hudson.model.Computer.Configure:arun</permission>
+    <permission>hudson.model.Computer.Connect:arun</permission>
+    <permission>hudson.model.Computer.Create:arun</permission>
+    <permission>hudson.model.Computer.Delete:arun</permission>
+    <permission>hudson.model.Computer.Disconnect:arun</permission>
+    <permission>hudson.model.Hudson.Administer:arun</permission>
+    <permission>hudson.model.Hudson.Read:arun</permission>
+    <permission>hudson.model.Item.Build:arun</permission>
+    <permission>hudson.model.Item.Cancel:arun</permission>
+    <permission>hudson.model.Item.Configure:arun</permission>
+    <permission>hudson.model.Item.Create:arun</permission>
+    <permission>hudson.model.Item.Delete:arun</permission>
+    <permission>hudson.model.Item.Discover:arun</permission>
+    <permission>hudson.model.Item.Move:arun</permission>
+    <permission>hudson.model.Item.Read:arun</permission>
+    <permission>hudson.model.Item.Workspace:arun</permission>
+    <permission>hudson.model.Run.Delete:arun</permission>
+    <permission>hudson.model.Run.Replay:arun</permission>
+    <permission>hudson.model.Run.Update:arun</permission>
+    <permission>hudson.model.View.Configure:arun</permission>
+    <permission>hudson.model.View.Create:arun</permission>
+    <permission>hudson.model.View.Delete:arun</permission>
+    <permission>hudson.model.View.Read:arun</permission>
+    <permission>hudson.scm.SCM.Tag:arun</permission>
+    <permission>org.jenkins.plugins.lockableresources.LockableResourcesManager.Reserve:arun</permission>
+    <permission>org.jenkins.plugins.lockableresources.LockableResourcesManager.Unlock:arun</permission>
+  </authorizationStrategy>
+  <securityRealm class="hudson.security.HudsonPrivateSecurityRealm">
+    <disableSignup>true</disableSignup>
+    <enableCaptcha>false</enableCaptcha>
+  </securityRealm>
+  <disableRememberMe>false</disableRememberMe>
+  <projectNamingStrategy class="jenkins.model.ProjectNamingStrategy$DefaultProjectNamingStrategy"/>
+  <workspaceDir>${JENKINS_HOME}/workspace/${ITEM_FULL_NAME}</workspaceDir>
+  <buildsDir>${ITEM_ROOTDIR}/builds</buildsDir>
+  <jdks>
+    <jdk>
+      <name>JDK 8</name>
+      <home>/usr/lib/jvm/java-8-openjdk-amd64</home>
+      <properties/>
+    </jdk>
+  </jdks>
+  <viewsTabBar class="hudson.views.DefaultViewsTabBar"/>
+  <myViewsTabBar class="hudson.views.DefaultMyViewsTabBar"/>
+  <clouds/>
+  <quietPeriod>5</quietPeriod>
+  <scmCheckoutRetryCount>0</scmCheckoutRetryCount>
+  <views>
+    <hudson.model.AllView>
+      <owner class="hudson" reference="../../.."/>
+      <name>All</name>
+      <filterExecutors>false</filterExecutors>
+      <filterQueue>false</filterQueue>
+      <properties class="hudson.model.View$PropertyList"/>
+    </hudson.model.AllView>
+  </views>
+  <primaryView>all</primaryView>
+  <slaveAgentPort>-1</slaveAgentPort>
+  <label></label>
+  <crumbIssuer class="hudson.security.csrf.DefaultCrumbIssuer">
+    <excludeClientIPFromCrumb>false</excludeClientIPFromCrumb>
+  </crumbIssuer>
+  <nodeProperties/>
+  <globalNodeProperties/>
+</hudson>
