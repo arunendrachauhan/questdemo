@@ -1,16 +1,24 @@
 node{
     stage('SCM Checkout'){
-	git credentialsId: 'gitGlobant', url: 'https://github.globant.com/arunendra-chauhan/devopsquest4'
+	git credentialsId: 'gitGlobant', url: 'https://github.globant.com/arunendra-chauhan/questdemo'
     }
-    stage('Mvn package'){
+    stage('Compile-Package'){
         def mvnHome = tool name: 'maven-3', type: 'maven'
         def mvnCMD = "${mvnHome}/bin/mvn"
         sh "${mvnCMD} clean package"
         sh 'mv target/myweb*.war target/myweb.war'
     }
-    stage('Build Docker Image'){
-        sh "docker build -t arunendradocker/demoimg:${ENV} ."
+    stage('Sonarqube-Analysis'){
+        def mvnHome = tool name: 'maven-3', type: 'maven'
+        def mvnCMD = "${mvnHome}/bin/mvn"
+        withSonarQubeEnv('sonar') {
+            sh "${mvnCMD} sonar:sonar"
+        }
     }
+    stage('Build Docker Image'){
+        sh "docker build -t demoimg:${ENV} ."
+    }
+
     stage('Push Docker Image'){
 	    withCredentials([string(credentialsId: 'docker-pwd', variable: 'dockerhubPwd')]) {
 	    sh "docker login -u arunendradocker -p ${dockerhubPwd}"
@@ -31,7 +39,7 @@ node{
         }
         }
     }
-    stage('run'){
+    stage('deploy'){
 	    sshagent(['credapp-server']) {
 	    withCredentials([string(credentialsId: 'docker-pwd', variable: 'dockerhubPwd')]) {
 	    sh "docker login -u arunendradocker -p ${dockerhubPwd}"
