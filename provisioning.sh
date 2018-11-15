@@ -27,11 +27,21 @@ sudo sh -c "echo deb https://pkg.jenkins.io/debian-stable binary/ | sudo tee /et
 sudo apt-get update -y
 sudo apt-get install -y jenkins
 sudo systemctl start jenkins
-#sudo cat /var/lib/jenkins/secrets/initialAdminPassword
+sudo cat /var/lib/jenkins/secrets/initialAdminPassword
 sudo systemctl status jenkins
-JENKINS_UID=$(id -u jenkins)
-JENKINS_GID=$(id -g jenkins)
-sudo useradd -u ${JENKINS_UID} -g ${JENKINS_GID} -m -d /var/lib/jenkins -s /bin/bash jenkins
+sleep 5
+#download cli
+pushd /opt
+sudo curl -O http://${host_IP}:8080/jnlpJars/jenkins-cli.jar
+#create jenkins user
+pass=`sudo cat /var/lib/jenkins/secrets/initialAdminPassword`\
+ && echo 'jenkins.model.Jenkins.instance.securityRealm.createAccount("arun", "arun")'\
+ | sudo java -jar jenkins-cli.jar -auth admin:$pass -s http://localhost:8080/ groovy =
+popd
+
+#JENKINS_UID=$(id -u jenkins)
+#JENKINS_GID=$(id -g jenkins)
+#sudo useradd -u ${JENKINS_UID} -g ${JENKINS_GID} -m -d /var/lib/jenkins -s /bin/bash jenkins
 
 #Open firewall ports
 sudo ufw --force enable
@@ -72,6 +82,7 @@ sudo git init
 
 sudo git clone https://github.com/${GITUSER}/${GITREPO}.git
 REPO_PATH="/opt/demo/${GITREPO}"
+
 #Configuring JENKINS
 pushd ${REPO_PATH}/jenkins
 sudo cp plugins.txt ${JENKINS_HOME}/plugins.txt
@@ -91,29 +102,23 @@ sudo service jenkins restart
 #configure nexus/sonar settings
 sudo sed -i -E "s,^#?(<url>http://).*:8081/repositories/maven-public</url>,\1${host_IP}," /etc/maven/settings.xml
 sudo sed -i -E "s,^#?(<url>http://).*:9000</sonar.host.url>,\1${host_IP}," /etc/maven/settings.xml
-
-#================================================================================================================================================
-#Create Jenkins Admin user
-sudo curl -O http://localhost:8080/jnlpJars/jenkins-cli.jar
-pass=`sudo cat /var/lib/jenkins/secrets/initialAdminPassword`\
- && echo 'jenkins.model.Jenkins.instance.securityRealm.createAccount("arun", "arun")'\
- | sudo java -jar jenkins-cli.jar -auth admin:$pass -s http://localhost:8080/ groovy =
 popd
- #Build and deploy docker container for SONARQUBE
- pushd ${REPO_PATH}/sonar
- sudo docker build -t sonarimg .
- #------------------------------------------------------------------------------------------------------------------------------------------------
- sudo docker run -d -p=9000:9000 --name=sonar sonarimg
- #================================================================================================================================================
- popd
+#================================================================================================================================================
+#Build and deploy docker container for SONARQUBE
+pushd ${REPO_PATH}/sonar
+sudo chmod +x run.sh
+sudo docker build -t sonarimg .
+#------------------------------------------------------------------------------------------------------------------------------------------------sudo docker run -d -p=9000:9000 --name=sonar sonarimg
+sudo docker run -d -p=9000:9000 --name=sonar sonarimg
+#================================================================================================================================================
+popd
 
- #Build and deploy docker container for nexus
- pushd ${REPO_PATH}/nexus
- sudo docker build -t nexusimg .
- #================================================================================================================================================
- sudo docker run -d -p=8081:8081 --name=nexus nexusimg
- #================================================================================================================================================
- popd
+#Build and deploy docker container for nexus
+pushd ${REPO_PATH}/nexus
+sudo docker build -t nexusimg .
+#================================================================================================================================================
+sudo docker run -d -p=8081:8081 --name=nexus nexusimg
+#================================================================================================================================================ popd
 
 #================================================================================================================================================
 echo Access Jenkins server using below address..
@@ -121,4 +126,4 @@ echo "http://${host_IP}:8080"
 echo access nexus using...
 echo "http://${host_IP}:8081"
 echo access sonar using...
-echo "http://${host_IP}:9000/sonar"
+echo "http://${host_IP}:9000"

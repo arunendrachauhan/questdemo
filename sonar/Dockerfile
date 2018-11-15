@@ -39,9 +39,7 @@ RUN set -x \
 
 VOLUME "$SONARQUBE_HOME/data"
 
-COPY run.sh $SONARQUBE_HOME/bin/
-RUN chmod +x $SONARQUBE_HOME/bin/run.sh
-
 WORKDIR $SONARQUBE_HOME
+COPY run.sh $SONARQUBE_HOME/bin/
 
 ENTRYPOINT ["./bin/run.sh"]
