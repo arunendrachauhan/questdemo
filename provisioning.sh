@@ -22,7 +22,7 @@ host_IP=$(hostname -I | cut -f2 -d' ')
 # Install Jenkins
 sudo useradd jenkins
 echo Hello, begin the script
-get -q -O - https://pkg.jenkins.io/debian/jenkins-ci.org.key | sudo apt-key add -
+wget -q -O - https://pkg.jenkins.io/debian/jenkins-ci.org.key | sudo apt-key add -
 sudo sh -c "echo deb https://pkg.jenkins.io/debian-stable binary/ | sudo tee /etc/apt/sources.list.d/jenkins.list"
 sudo apt-get update -y
 sudo apt-get install -y jenkins
