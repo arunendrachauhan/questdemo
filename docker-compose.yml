@@ -1,7 +1,7 @@
 version: '3'
 
 networks:
-  prodnetwork:
+  testnetwork:
     driver: bridge
 
 volumes:
@@ -15,16 +15,16 @@ services:
     ports:
       - "18081:8081"
     networks:
-      - prodnetwork
+      - testnetwork
     volumes:
       - nexus-data:/nexus-data
   jenkins:
-    build: ./jenkins
+    build: ./jenkins-docker
     restart: always
     ports:
       - "18080:8080"
     networks:
-      - prodnetwork
+      -
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
       - /usr/bin/docker:/usr/bin/docker
@@ -38,7 +38,7 @@ services:
       - SONAR_DB_PORT=5432
   sonardb:
     networks:
-      - prodnetwork
+      - testnetwork
     restart: always
     image: postgres:9.6
     ports:
@@ -53,7 +53,7 @@ services:
      - "19000:9000"
      - "19092:9092"
     networks:
-      - prodnetwork
+      - testnetwork
     depends_on:
       - sonardb
     environment:
