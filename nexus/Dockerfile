@@ -20,7 +20,7 @@ RUN INSTALL_PKGS="java-1.8.0-openjdk.x86_64" && \
 RUN yum -y install unzip && yum clean all
 
 ADD https://download.sonatype.com/nexus/oss/nexus-${NEXUS_VERSION}-bundle.zip nexus-${NEXUS_VERSION}-bundle.zip
-
+EXPOSE 8081
 # Extract Nexus
 RUN set -x \
 	&& unzip nexus-${NEXUS_VERSION}-bundle.zip \
