@@ -1,4 +1,4 @@
-def gitUrl = 'https://github.com/codecentric/conference-app'
+def gitUrl = 'https://github.com/arunendrachauhan/questdemo'
 
 createPipelineJob ("MyDemo", gitUrl, "jenkins/Jenkinsfile")
 def createPipelineJob (def jobName, def gitUrl, def scriptPath){
@@ -26,4 +26,5 @@ pipelineJob("${jobName}") {
 			displayName("DEMO")
 		}
 	}
+}
 }
